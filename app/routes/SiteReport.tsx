@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useForm, useFieldArray } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
 import * as z from 'zod';
@@ -6,13 +6,12 @@ import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { supabase } from '@/lib/supabase';
 import { toast } from 'sonner';
 import { Badge } from '@/components/ui/badge';
-import { 
-  Plus, 
-  Trash2, 
-  Save, 
-  Upload, 
-  Camera, 
-  FileText, 
+import {
+  Plus,
+  Trash2,
+  Save,
+  Upload,
+  Camera,
   CheckCircle2,
   AlertCircle,
   ChevronRight,
@@ -20,7 +19,6 @@ import {
   Users,
   Wrench,
   ClipboardCheck,
-  Calendar as CalendarIcon,
   LayoutDashboard,
   RefreshCw
 } from 'lucide-react';
@@ -29,10 +27,9 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { cn } from '@/lib/utils';
 
 const siteReportSchema = z.object({
   client: z.string().min(1, "Client name is required"),
@@ -128,12 +125,6 @@ type SiteReportFormValues = z.infer<typeof siteReportSchema>;
 
 export function SiteReport() {
   const [view, setView] = useState<'list' | 'create'>('list');
-  const handleViewChange = (newView: 'list' | 'create') => {
-    if (view === 'create' && newView === 'list') {
-      clearSavedData();
-    }
-    setView(newView);
-  };
   const [photos, setPhotos] = useState<File[]>([]);
   const queryClient = useQueryClient();
   const FORM_STORAGE_KEY = 'site-report-form-data';
@@ -207,11 +198,6 @@ export function SiteReport() {
       }
     }
   }, [view, form]);
-
-  // Clear saved data when form is submitted or view changes
-  const clearSavedData = () => {
-    localStorage.removeItem(FORM_STORAGE_KEY);
-  };
 
   const { fields: subContractorFields, append: appendSubContractor, remove: removeSubContractor } = useFieldArray({
     control: form.control,
@@ -511,11 +497,13 @@ export function SiteReport() {
           <CardContent className="p-3 grid grid-cols-1 md:grid-cols-3 gap-3">
             <div className="space-y-1">
               <Label className="text-[10px] font-bold uppercase text-slate-500">Client</Label>
-              <Select 
-                value={form.watch('client')} 
+              <Select
+                value={form.watch('client')}
                 onValueChange={(val) => {
-                  form.setValue('client', val);
-                  form.setValue('projectName', ''); 
+                  if (val) {
+                    form.setValue('client', val);
+                    form.setValue('projectName', '');
+                  }
                 }}
                 items={clients?.map(c => ({ value: c.id, label: c.name })) || []}
               >
@@ -531,9 +519,9 @@ export function SiteReport() {
             </div>
             <div className="space-y-1">
               <Label className="text-[10px] font-bold uppercase text-slate-500">Project Name</Label>
-              <Select 
-                value={form.watch('projectName')} 
-                onValueChange={(val) => form.setValue('projectName', val)}
+              <Select
+                value={form.watch('projectName')}
+                onValueChange={(val) => val && form.setValue('projectName', val)}
                 disabled={!selectedClientId}
                 items={projects?.map(p => ({ value: p.id, label: p.name })) || []}
               >

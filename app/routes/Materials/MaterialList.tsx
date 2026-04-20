@@ -52,7 +52,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useMaterialsData } from '../hooks/useMaterials';
+import { useMaterialsData } from './hooks/useMaterials';
 import { useQuery } from '@tanstack/react-query';
 import { cn } from '@/lib/utils';
 
@@ -173,7 +173,7 @@ export function MaterialList() {
             />
             <Label htmlFor="hide-inactive" className="text-sm cursor-pointer">Hide Inactive</Label>
           </div>
-          <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+          <Select value={selectedCategory} onValueChange={(val) => val && setSelectedCategory(val)}>
             <SelectTrigger className="w-[180px] h-11 md:h-9 bg-slate-50">
               <SelectValue placeholder="All Categories" />
             </SelectTrigger>
@@ -188,7 +188,7 @@ export function MaterialList() {
 
         <div className="flex items-center gap-2">
           <DropdownMenu>
-            <DropdownMenuTrigger asChild>
+            <DropdownMenuTrigger>
               <Button variant="outline" size="sm" className="gap-2 text-slate-600 hidden md:flex h-9">
                 <Columns className="w-4 h-4" /> Columns
               </Button>
@@ -528,7 +528,7 @@ export function MaterialList() {
                 )}
                 <TableCell className="text-right">
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger>
                       <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-slate-100"><MoreHorizontal className="w-4 h-4" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-40">

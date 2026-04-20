@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase, Project, Client, ProjectStatus, ProjectType } from '@/lib/supabase';
+import { supabase, Project, Client, ProjectStatus } from '@/lib/supabase';
 import { 
   Table, 
   TableBody, 
@@ -10,7 +10,7 @@ import {
   TableRow 
 } from '@/components/ui/table';
 import { Button } from '@/components/ui/button';
-import { Plus, Search, MoreHorizontal, LayoutGrid, List } from 'lucide-react';
+import { Search, MoreHorizontal, LayoutGrid, List } from 'lucide-react';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { 
@@ -22,7 +22,7 @@ import {
 } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
 import { toast } from 'sonner';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Tabs, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Switch } from '@/components/ui/switch';
 import { Textarea } from '@/components/ui/textarea';
 import { cn } from '@/lib/utils';
@@ -33,7 +33,7 @@ export function Projects() {
   const orgId = user?.profile?.organisation_id;
   const [searchTerm, setSearchTerm] = useState('');
   const [activeTab, setActiveTab] = useState('all');
-  const [status, setStatus] = useState<ProjectStatus>('Draft');
+  const [status, setStatus] = useState<ProjectStatus>('draft');
   const [poRequired, setPoRequired] = useState(false);
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const queryClient = useQueryClient();
@@ -108,6 +108,7 @@ export function Projects() {
       organisation_id: orgId,
       name: formData.get('name') as string,
       client_id: formData.get('client_id') as string,
+      location: formData.get('location') as string || '',
       status: status,
       project_type: formData.get('project_type') as string,
       po_value: parseFloat(formData.get('po_value') as string) || 0,
@@ -118,12 +119,13 @@ export function Projects() {
     });
   };
 
-  const statusColors: Record<ProjectStatus, string> = {
-    'Draft': 'bg-slate-100 text-slate-700',
-    'Active': 'bg-blue-100 text-blue-700',
-    'Execution Completed': 'bg-emerald-100 text-emerald-700',
-    'Financially Closed': 'bg-amber-100 text-amber-700',
-    'Closed': 'bg-red-100 text-red-700',
+  const statusColors: Record<string, string> = {
+    'pending': 'bg-slate-100 text-slate-700',
+    'draft': 'bg-slate-100 text-slate-700',
+    'active': 'bg-blue-100 text-blue-700',
+    'completed': 'bg-emerald-100 text-emerald-700',
+    'on_hold': 'bg-amber-100 text-amber-700',
+    'cancelled': 'bg-red-100 text-red-700',
   };
 
   return (
@@ -338,7 +340,7 @@ export function Projects() {
               <div className="space-y-6">
                 <div className="space-y-2">
                   <Label htmlFor="status">Current Status</Label>
-                  <Select value={status} onValueChange={(val: ProjectStatus) => setStatus(val)}>
+                  <Select value={status} onValueChange={(val) => val && setStatus(val)}>
                     <SelectTrigger>
                       <SelectValue />
                     </SelectTrigger>

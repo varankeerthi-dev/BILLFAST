@@ -18,12 +18,11 @@ import {
   TableHeader, 
   TableRow 
 } from '@/components/ui/table';
-import { 
-  Dialog, 
-  DialogContent, 
-  DialogHeader, 
-  DialogTitle, 
-  DialogTrigger,
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
   DialogFooter
 } from '@/components/ui/dialog';
 import {
@@ -35,7 +34,7 @@ import {
 import { Label } from '@/components/ui/label';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { useMaterialsData } from '../hooks/useMaterials';
+import { useMaterialsData } from './hooks/useMaterials';
 import { cn } from '@/lib/utils';
 
 export function ServiceList() {
@@ -73,7 +72,7 @@ export function ServiceList() {
   };
 
   const filteredServices = services?.filter(s => {
-    const matchesSearch = s.service_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch = (s.service_name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
                          (s.service_code?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
     const matchesStatus = !hideInactive || s.is_active;
     return matchesSearch && matchesStatus;
@@ -193,7 +192,7 @@ export function ServiceList() {
                 </TableCell>
                 <TableCell className="text-right">
                    <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger>
                       <Button variant="ghost" size="icon" className="h-8 w-8 hover:bg-slate-100"><MoreHorizontal className="w-4 h-4" /></Button>
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end" className="w-32">

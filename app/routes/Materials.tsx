@@ -1,11 +1,11 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { cn } from '@/lib/utils';
-import { MaterialList } from './Materials/components/MaterialList';
-import { ServiceList } from './Materials/components/ServiceList';
-import { CategoryList } from './Materials/components/CategoryList';
-import { UnitList } from './Materials/components/UnitList';
-import { WarehouseList } from './Materials/components/WarehouseList';
-import { VariantList } from './Materials/components/VariantList';
+import { MaterialList } from './Materials/MaterialList';
+import { ServiceList } from './Materials/ServiceList';
+import { CategoryList } from './Materials/CategoryList';
+import { UnitList } from './Materials/UnitList';
+import { WarehouseList } from './Materials/WarehouseList';
+import { VariantList } from './Materials/VariantList';
 
 type MaterialTab = 'items' | 'service' | 'category' | 'unit' | 'warehouses' | 'variants';
 

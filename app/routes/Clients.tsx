@@ -1,6 +1,5 @@
-import React, { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from '@tanstack/react-router';
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useState, useEffect, useMemo } from 'react';
+import { useQuery } from '@tanstack/react-query';
 import { supabase, Client } from '@/lib/supabase';
 import { Button } from '@/components/ui/button';
 import { Plus, Search, Edit2 } from 'lucide-react';
@@ -10,12 +9,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { useAuth } from '@/contexts/AuthContext';
 
 export function Clients() {
-  const navigate = useNavigate({ from: '/clients' });
   const { user } = useAuth();
   const orgId = user?.profile?.organisation_id;
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedClientId, setSelectedClientId] = useState<string | null>(null);
-  const queryClient = useQueryClient();
 
   const { data: clients, isLoading } = useQuery({
     queryKey: ['clients', orgId],
@@ -91,7 +88,7 @@ export function Clients() {
             <Button 
               size="sm" 
               className="bg-blue-600 hover:bg-blue-700 gap-1"
-              onClick={() => navigate('/clients/add')}
+              // onClick={() => navigate({ to: '/clients/add' })}
             >
               <Plus className="w-4 h-4" /> New
             </Button>
@@ -163,7 +160,7 @@ export function Clients() {
                 variant="outline" 
                 size="sm" 
                 className="gap-2"
-                onClick={() => navigate(`/clients/edit/${selectedClient.id}`)}
+                // onClick={() => navigate(`/clients/edit/${selectedClient.id}`)}
               >
                 <Edit2 className="w-4 h-4" /> Edit Profile
               </Button>

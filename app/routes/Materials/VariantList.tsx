@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from '@/components/ui/label';
-import { useMaterialsData } from '../hooks/useMaterials';
+import { useMaterialsData } from './hooks/useMaterials';
 import { cn } from '@/lib/utils';
 
 export function VariantList() {
@@ -175,7 +175,7 @@ export function VariantList() {
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger>
                         <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-900">
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>

@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from '@/components/ui/label';
-import { useMaterialsData } from '../hooks/useMaterials';
+import { useMaterialsData } from './hooks/useMaterials';
 import { cn } from '@/lib/utils';
 
 export function UnitList() {
@@ -69,8 +69,8 @@ export function UnitList() {
   };
 
   const filteredUnits = units?.filter(u => {
-    const matchesSearch = u.unit_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
-                         u.unit_code.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesSearch = (u.unit_name || '').toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         (u.unit_code || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = !hideInactive || u.is_active;
     return matchesSearch && matchesStatus;
   });
@@ -202,7 +202,7 @@ export function UnitList() {
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger>
                         <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-900">
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>

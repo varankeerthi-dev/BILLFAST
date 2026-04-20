@@ -1,7 +1,7 @@
 import { useQuery } from '@tanstack/react-query'
 import { supabase } from '@/lib/supabase'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { LayoutDashboard, Users, ClipboardCheck, Calendar, TrendingUp } from 'lucide-react'
+import { Users, ClipboardCheck, Calendar, TrendingUp } from 'lucide-react'
 
 export default function Dashboard() {
   const { data: stats } = useQuery({

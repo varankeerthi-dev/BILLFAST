@@ -33,7 +33,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Label } from '@/components/ui/label';
-import { useMaterialsData } from '../hooks/useMaterials';
+import { useMaterialsData } from './hooks/useMaterials';
 import { cn } from '@/lib/utils';
 
 export function WarehouseList() {
@@ -70,7 +70,7 @@ export function WarehouseList() {
   };
 
   const filteredWarehouses = warehouses?.filter(w => {
-    const matchesSearch = w.warehouse_name.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    const matchesSearch = (w.warehouse_name || '').toLowerCase().includes(searchTerm.toLowerCase()) || 
                          (w.warehouse_code?.toLowerCase().includes(searchTerm.toLowerCase()) ?? false);
     const matchesStatus = !hideInactive || w.is_active;
     return matchesSearch && matchesStatus;
@@ -201,7 +201,7 @@ export function WarehouseList() {
                   </TableCell>
                   <TableCell className="text-right">
                     <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
+                      <DropdownMenuTrigger>
                         <Button variant="ghost" size="icon" className="text-slate-400 hover:text-slate-900">
                           <MoreHorizontal className="w-4 h-4" />
                         </Button>

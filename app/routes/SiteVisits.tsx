@@ -1,29 +1,25 @@
-import React, { useState, useMemo, useEffect, useCallback } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { supabase, SiteVisit, Project, Client } from '@/lib/supabase';
+import { supabase, SiteVisit, Client } from '@/lib/supabase';
 import { debounce } from 'lodash';
 import { Button } from '@/components/ui/button';
-import { 
-  Plus, 
-  MapPin, 
-  Calendar as CalendarIcon, 
-  CheckCircle2, 
-  Clock, 
-  XCircle, 
-  ChevronLeft, 
+import {
+  Plus,
+  MapPin,
+  Calendar as CalendarIcon,
+  CheckCircle2,
+  Clock,
+  ChevronLeft,
   ChevronRight,
   LayoutDashboard,
   CalendarDays,
   Search,
   MoreVertical,
-  ExternalLink,
   Camera,
   FileText,
-  User,
   AlertCircle,
   Edit,
   Settings2,
-  Filter,
   Trash2,
   CalendarClock,
   Pencil,
@@ -85,18 +81,17 @@ import {
 import { cn } from '@/lib/utils';
 
 export function SiteVisits() {
-  const [activeTab, setActiveTab] = useState('dashboard');
   const [isUpdateModalOpen, setIsUpdateModalOpen] = useState(false);
   const [isScheduleModalOpen, setIsScheduleModalOpen] = useState(false);
   const [isAddClientModalOpen, setIsAddClientModalOpen] = useState(false);
   const [isAddPurposeModalOpen, setIsAddPurposeModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [selectedVisit, setSelectedVisit] = useState<any | null>(null);
+  const [selectedVisit, setSelectedVisit] = useState<SiteVisit | null>(null);
   const [scheduleDateStr, setScheduleDateStr] = useState<string>(format(new Date(), 'yyyy-MM-dd'));
   const [scheduleStatus, setScheduleStatus] = useState<string>('scheduled');
   const [updateStatus, setUpdateStatus] = useState<string>('pending');
   const [updatePurpose, setUpdatePurpose] = useState<string>('');
-  const [visitToDelete, setVisitToDelete] = useState<any | null>(null);
+  const [visitToDelete, setVisitToDelete] = useState<SiteVisit | null>(null);
   
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
@@ -140,26 +135,13 @@ export function SiteVisits() {
           ),
           clients (name)
         `)
-        .order('visit_date', { ascending: false })
-        .options({
-          staleTime: 1 * 60 * 1000, // 1 minute - reduced for frequently changing data
-          gcTime: 5 * 60 * 1000, // 5 minutes
-        });
+        .order('visit_date', { ascending: false });
       
       if (error) throw error;
       return data as (SiteVisit & { 
         projects: { name: string, clients: { name: string } },
         clients: { name: string }
       })[];
-    },
-  });
-
-  const { data: projects } = useQuery({
-    queryKey: ['projects'],
-    queryFn: async () => {
-      const { data, error } = await supabase.from('projects').select('id, name, client_id');
-      if (error) throw error;
-      return data as (Pick<Project, 'id' | 'name' | 'client_id'>)[];
     },
   });
 
@@ -344,14 +326,7 @@ export function SiteVisits() {
     }
   };
 
-  const statusIcons = {
-    pending: Clock,
-    scheduled: Clock,
-    completed: CheckCircle2,
-    cancelled: XCircle,
-  };
-
-  const statusColors = {
+  const statusColors: Record<string, string> = {
     pending: 'bg-amber-100 text-amber-700',
     scheduled: 'bg-blue-100 text-blue-700',
     completed: 'bg-emerald-100 text-emerald-700',
@@ -417,7 +392,7 @@ export function SiteVisits() {
               setScheduleStatus(isPast ? 'completed' : 'scheduled');
             }
           }}>
-            <DialogTrigger asChild>
+            <DialogTrigger>
               <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700" onClick={() => {
                 setSelectedVisit(null);
                 setSelectedDate(null);
@@ -505,10 +480,10 @@ export function SiteVisits() {
 
                 <div className="space-y-2">
                   <Label htmlFor="simple_status">Status *</Label>
-                  <Select 
-                    name="status" 
-                    value={scheduleStatus} 
-                    onValueChange={setScheduleStatus} 
+                  <Select
+                    name="status"
+                    value={scheduleStatus}
+                    onValueChange={(val) => val && setScheduleStatus(val)}
                     required
                     items={[
                       { value: 'completed', label: 'Completed' },
@@ -589,7 +564,7 @@ export function SiteVisits() {
               setUpdatePurpose(selectedVisit?.purpose || '');
             }
           }}>
-            <DialogTrigger asChild>
+            <DialogTrigger>
               <Button variant="outline" className="gap-2" onClick={() => {
                 setSelectedVisit(null);
                 setUpdateStatus('pending');
@@ -681,7 +656,7 @@ export function SiteVisits() {
                         onValueChange={(val) => {
                           if (val === 'ADD_NEW') {
                             setIsAddPurposeModalOpen(true);
-                          } else {
+                          } else if (val) {
                             setUpdatePurpose(val);
                           }
                         }}
@@ -740,10 +715,10 @@ export function SiteVisits() {
                       </div>
                       <div className="space-y-2">
                         <Label htmlFor="status">Status</Label>
-                        <Select 
-                          name="status" 
-                          value={updateStatus} 
-                          onValueChange={setUpdateStatus}
+                        <Select
+                          name="status"
+                          value={updateStatus}
+                          onValueChange={(val) => val && setUpdateStatus(val)}
                           items={[
                             { value: 'pending', label: 'Pending' },
                             { value: 'scheduled', label: 'Scheduled' },
@@ -836,7 +811,7 @@ export function SiteVisits() {
               </div>
               <DialogFooter>
                 <Button variant="outline" onClick={() => setVisitToDelete(null)}>Cancel</Button>
-                <Button variant="destructive" onClick={() => deleteVisitMutation.mutate(visitToDelete.id)} disabled={deleteVisitMutation.isPending}>
+                <Button variant="destructive" onClick={() => visitToDelete && deleteVisitMutation.mutate(visitToDelete.id)} disabled={deleteVisitMutation.isPending}>
                   {deleteVisitMutation.isPending ? 'Deleting...' : 'Delete'}
                 </Button>
               </DialogFooter>
@@ -845,7 +820,7 @@ export function SiteVisits() {
         </div>
       </div>
 
-      <Tabs defaultValue="dashboard" className="w-full" onValueChange={setActiveTab}>
+      <Tabs defaultValue="dashboard" className="w-full">
         <TabsList className="grid w-full max-w-[400px] grid-cols-2 mb-8 bg-slate-100 p-1 rounded-xl">
           <TabsTrigger value="dashboard" className="rounded-lg data-[state=active]:bg-white data-[state=active]:shadow-sm gap-2">
             <LayoutDashboard className="w-4 h-4" /> Dashboard
@@ -927,9 +902,9 @@ export function SiteVisits() {
                       onChange={(e) => setSearchQuery(e.target.value)}
                     />
                   </div>
-                  <Select 
-                    value={statusFilter} 
-                    onValueChange={setStatusFilter}
+                  <Select
+                    value={statusFilter}
+                    onValueChange={(val) => val && setStatusFilter(val)}
                     items={[
                       { value: 'all', label: 'All Status' },
                       { value: 'pending', label: 'Pending' },
@@ -950,7 +925,7 @@ export function SiteVisits() {
                     </SelectContent>
                   </Select>
                   <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                    <DropdownMenuTrigger>
                       <Button variant="outline" size="sm" className="h-9 gap-2">
                         <Settings2 className="w-4 h-4" /> <span className="hidden sm:inline">Columns</span>
                       </Button>
@@ -1036,7 +1011,7 @@ export function SiteVisits() {
                               {visibleColumns.actions && (
                                 <TableCell className="text-right">
                                   <DropdownMenu>
-                                    <DropdownMenuTrigger asChild>
+                                    <DropdownMenuTrigger>
                                       <Button variant="ghost" size="icon" className="h-8 w-8 text-slate-400 hover:text-indigo-600">
                                         <MoreVertical className="w-4 h-4" />
                                       </Button>
