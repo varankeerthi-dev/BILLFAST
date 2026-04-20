@@ -1,6 +1,4 @@
 name = "constructflow"
-main = "app/server.ts"
-compatibility_date = "2024-04-01"
 
 [site]
 bucket = "./dist"
