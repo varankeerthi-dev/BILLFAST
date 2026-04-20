@@ -22,31 +22,36 @@ export function SideMenu() {
   const location = useLocation()
 
   return (
-    <aside className="w-56 bg-white border-r border-gray-200 h-screen fixed left-0 top-0 flex flex-col">
-      <div className="p-4 border-b border-gray-200">
-        <h1 className="text-lg font-semibold text-gray-900 leading-tight">ConstructFlow</h1>
+    <aside style={{ width: '224px', backgroundColor: 'white', borderRight: '1px solid #e5e7eb', height: '100vh', position: 'fixed', left: 0, top: 0, display: 'flex', flexDirection: 'column' }}>
+      <div style={{ padding: '16px', borderBottom: '1px solid #e5e7eb' }}>
+        <h1 style={{ fontSize: '18px', fontWeight: 600, color: '#111827', lineHeight: '1.25' }}>ConstructFlow</h1>
       </div>
       
-      <nav className="flex-1 p-2">
-        <ul className="space-y-1">
+      <nav style={{ flex: 1, padding: '8px' }}>
+        <ul style={{ listStyle: 'none', margin: 0, padding: 0 }}>
           {menuItems.map((item) => {
             const isActive = location.pathname === item.path
             const Icon = item.icon
             
             return (
-              <li key={item.path}>
+              <li key={item.path} style={{ marginBottom: '4px' }}>
                 <Link
                   to={item.path}
-                  className={cn(
-                    "flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium transition-colors",
-                    "leading-none",
-                    isActive
-                      ? "bg-blue-50 text-blue-600"
-                      : "text-gray-700 hover:bg-orange-50 hover:text-orange-600"
-                  )}
+                  style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '12px',
+                    padding: '10px 12px',
+                    borderRadius: '6px',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    textDecoration: 'none',
+                    backgroundColor: isActive ? '#eff6ff' : 'transparent',
+                    color: isActive ? '#2563eb' : '#374151',
+                  }}
                 >
-                  <Icon className="w-4 h-4 flex-shrink-0" />
-                  <span className="leading-none">{item.label}</span>
+                  <Icon style={{ width: '16px', height: '16px', flexShrink: 0 }} />
+                  <span>{item.label}</span>
                 </Link>
               </li>
             )
@@ -54,13 +59,23 @@ export function SideMenu() {
         </ul>
       </nav>
       
-      <div className="p-2 border-t border-gray-200">
+      <div style={{ padding: '8px', borderTop: '1px solid #e5e7eb' }}>
         <Link
           to="/settings"
-          className="flex items-center gap-3 px-3 py-2.5 rounded-md text-sm font-medium text-gray-700 hover:bg-orange-50 hover:text-orange-600 transition-colors leading-none"
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '12px',
+            padding: '10px 12px',
+            borderRadius: '6px',
+            fontSize: '14px',
+            fontWeight: 500,
+            textDecoration: 'none',
+            color: '#374151',
+          }}
         >
-          <Settings className="w-4 h-4 flex-shrink-0" />
-          <span className="leading-none">Settings</span>
+          <Settings style={{ width: '16px', height: '16px', flexShrink: 0 }} />
+          <span>Settings</span>
         </Link>
       </div>
     </aside>
