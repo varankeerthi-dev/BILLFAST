@@ -5,18 +5,3 @@ bucket = "./dist"
 
 [build]
 command = "npm run build"
-
-[env.production]
-name = "constructflow-prod"
-
-[env.staging]
-name = "constructflow-staging"
-
-# Variables for Supabase
-[vars]
-VITE_SUPABASE_URL = "https://xwhaqxusgnmaevxjyysj.supabase.co"
-VITE_SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inh3aHFxeHVzZ25tYWV2eGp5eXNqIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzQwNzYwODMsImV4cCI6MjA4OTY1MjA4M30.eRhKXjk2G1UZ3uFa5ddODRpA1auTI6KvivWrzzm_oGAn-key"
-
-# Secrets (use wrangler secret put)
-# wrangler secret put SUPABASE_URL
-# wrangler secret put SUPABASE_ANON_KEY
