@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 # ConstructFlow - TanStack Router Migration
 
 ## Migration Status: COMPLETED
@@ -91,25 +90,3 @@ npm run deploy
 
 ### Note:
 This is a TanStack Router (client-side) migration with Supabase. For 5-10 users, Supabase Free Tier is sufficient. Scale to Pro tier when exceeding 50 users.
-=======
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
-
-# Run and deploy your AI Studio app
-
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/7efb2c89-6bb6-4ee3-92e6-f147c723d543
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
->>>>>>> a53f0d2f5c356fb5734a99558f590d2a3853a149
