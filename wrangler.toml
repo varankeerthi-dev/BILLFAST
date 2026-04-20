@@ -1,0 +1,24 @@
+name = "constructflow"
+main = "app/server.ts"
+compatibility_date = "2024-04-01"
+
+[site]
+bucket = "./dist"
+
+[build]
+command = "npm run build"
+
+[env.production]
+name = "constructflow-prod"
+
+[env.staging]
+name = "constructflow-staging"
+
+# Variables for Supabase
+[vars]
+VITE_SUPABASE_URL = ""
+VITE_SUPABASE_ANON_KEY = ""
+
+# Secrets (use wrangler secret put)
+# wrangler secret put SUPABASE_URL
+# wrangler secret put SUPABASE_ANON_KEY

@@ -1,13 +1,16 @@
 {
   "name": "constructflow-tanstack",
   "version": "1.0.0",
-  "description": "ConstructFlow - TanStack Start Migration",
+  "description": "ConstructFlow - TanStack Router Migration",
   "type": "module",
   "scripts": {
     "dev": "vite",
     "build": "vite build",
     "start": "vite preview",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "deploy": "npm run build && wrangler pages deploy dist",
+    "deploy:staging": "npm run build && wrangler pages deploy dist --env staging",
+    "deploy:production": "npm run build && wrangler pages deploy dist --env production"
   },
   "dependencies": {
     "@hookform/resolvers": "^5.2.2",
@@ -35,6 +38,7 @@
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^4.3.4",
     "typescript": "^5.7.2",
-    "vite": "^6.4.1"
+    "vite": "^6.4.1",
+    "wrangler": "^3.114.17"
   }
 }
