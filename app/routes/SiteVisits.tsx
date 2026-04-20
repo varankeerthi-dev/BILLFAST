@@ -392,7 +392,7 @@ export function SiteVisits() {
               setScheduleStatus(isPast ? 'completed' : 'scheduled');
             }
           }}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button className="gap-2 bg-indigo-600 hover:bg-indigo-700" onClick={() => {
                 setSelectedVisit(null);
                 setSelectedDate(null);
@@ -564,7 +564,7 @@ export function SiteVisits() {
               setUpdatePurpose(selectedVisit?.purpose || '');
             }
           }}>
-            <DialogTrigger>
+            <DialogTrigger asChild>
               <Button variant="outline" className="gap-2" onClick={() => {
                 setSelectedVisit(null);
                 setUpdateStatus('pending');
